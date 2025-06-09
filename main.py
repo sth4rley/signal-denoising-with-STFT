@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import soundfile as sf
 from scipy.signal import medfilt
 import os
+import gradio as gr
 
 DIRETORIO_SAIDA = "resultados_processamento"
 os.makedirs(DIRETORIO_SAIDA, exist_ok=True)
@@ -106,4 +107,27 @@ def reduzir_ruido(caminho_audio_entrada, duracao_ruido_ms, tamanho_filtro_median
     return caminho_audio_saida, caminho_plot_analise
 
 
-audio_saida, analise_saide = reduzir_ruido("entrada.wav", 400, 5, "saida.wav")
+iface = gr.Interface(
+    fn=reduzir_ruido,
+    inputs=[
+        gr.Audio(type="filepath", label="Arquivo de Áudio de Entrada (.wav)"),
+        gr.Slider(minimum=10, maximum=1000, value=100, step=10, label="Duração para Estimativa de Ruído (ms)"),
+        gr.Slider(minimum=1, maximum=21, value=5, step=2, label="Tamanho do Filtro de Mediana (temporal, ímpar)"),
+        gr.Textbox(value="saida_processada", label="Nome Base para Arquivos de Saída")
+    ],
+    outputs=[
+        gr.Audio(label="Áudio Processado"),
+        # TODO: Separar Espectogramas
+        gr.Image(label="Análise dos Espectrogramas"),
+        # TODO: ADICIONAR FORMAS DE ONDA
+    ],
+    title="Analise de sinais e sistemas 2025.1",
+    description="Sistema de redução de ruído em áudio no domínio da frequência, baseado na Transformada de Fourier de Tempo Curto (STFT) ",
+    allow_flagging="never",
+    css="footer {display: none !important;}"
+)
+
+if __name__ == '__main__':
+    if not os.path.exists(DIRETORIO_SAIDA):
+        os.makedirs(DIRETORIO_SAIDA)
+    iface.launch(share=False)
