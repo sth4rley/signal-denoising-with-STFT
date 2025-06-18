@@ -1,4 +1,15 @@
 #!/usr/bin/env python3
+
+"""
+Projeto de Redução de Ruído em Áudio usando Transformada de Fourier de Tempo Curto (STFT).
+Desenvolvido como parte da disciplina de Análise de Sinais e Sistemas (2025.1).
+
+O sistema permite estimar o perfil de ruído a partir de um trecho do sinal,
+aplicar uma máscara espectral suave e reconstruir o sinal no domínio do tempo,
+além de gerar visualizações das formas de onda, espectrogramas e máscaras aplicadas.
+"""
+
+
 import numpy as np
 import librosa
 import librosa.display
